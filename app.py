@@ -12,7 +12,7 @@ model = joblib.load("house_price_model.pkl")
 
 st.title("🏠 House Price Prediction")
 
-st.write("Adjust the sliders to predict the median house value.")
+st.write("Enter the house and area information to predict the median house value.")
 
 st.subheader("Enter House Information")
 
@@ -37,22 +37,26 @@ with col3:
     B = st.slider("B", 0.0, 400.0, 350.0)
     LSTAT = st.slider("LSTAT", 0.0, 40.0, 12.0)
 
-input_data = pd.DataFrame({
-    "CRIM": [CRIM],
-    "ZN": [ZN],
-    "INDUS": [INDUS],
-    "CHAS": [CHAS],
-    "NOX": [NOX],
-    "RM": [RM],
-    "AGE": [AGE],
-    "DIS": [DIS],
-    "RAD": [RAD],
-    "TAX": [TAX],
-    "PTRATIO": [PTRATIO],
-    "B": [B],
-    "LSTAT": [LSTAT]
-})
+st.write("")
 
-prediction = model.predict(input_data)[0]
+if st.button("🏠 Predict House Price", use_container_width=True):
 
-st.success(f"Predicted House Value: {prediction:.2f}")
+    input_data = pd.DataFrame({
+        "CRIM": [CRIM],
+        "ZN": [ZN],
+        "INDUS": [INDUS],
+        "CHAS": [CHAS],
+        "NOX": [NOX],
+        "RM": [RM],
+        "AGE": [AGE],
+        "DIS": [DIS],
+        "RAD": [RAD],
+        "TAX": [TAX],
+        "PTRATIO": [PTRATIO],
+        "B": [B],
+        "LSTAT": [LSTAT]
+    })
+
+    prediction = model.predict(input_data)[0]
+
+    st.success(f"Predicted House Value: {prediction:.2f}")
