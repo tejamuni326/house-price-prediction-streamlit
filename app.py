@@ -12,66 +12,47 @@ model = joblib.load("house_price_model.pkl")
 
 st.title("🏠 House Price Prediction")
 
-st.write(
-    "Enter the house and area information "
-    "to predict the median house value."
-)
+st.write("Adjust the sliders to predict the median house value.")
 
 st.subheader("Enter House Information")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    CRIM = st.number_input("CRIM", min_value=0.0, value=1.0)
-    ZN = st.number_input("ZN", min_value=0.0, value=0.0)
-    INDUS = st.number_input("INDUS", min_value=0.0, value=10.0)
-    CHAS = st.number_input(
-        "CHAS",
-        min_value=0.0,
-        max_value=1.0,
-        value=0.0
-    )
-    NOX = st.number_input("NOX", min_value=0.0, value=0.5)
+    CRIM = st.slider("CRIM", 0.0, 90.0, 1.0)
+    ZN = st.slider("ZN", 0.0, 100.0, 0.0)
+    INDUS = st.slider("INDUS", 0.0, 30.0, 10.0)
+    CHAS = st.slider("CHAS", 0.0, 1.0, 0.0, step=1.0)
+    NOX = st.slider("NOX", 0.0, 1.0, 0.5)
 
 with col2:
-    RM = st.number_input("RM", min_value=0.0, value=6.0)
-    AGE = st.number_input(
-        "AGE",
-        min_value=0.0,
-        max_value=100.0,
-        value=50.0
-    )
-    DIS = st.number_input("DIS", min_value=0.0, value=4.0)
-    RAD = st.number_input("RAD", min_value=0, value=5)
+    RM = st.slider("RM", 0.0, 10.0, 6.0)
+    AGE = st.slider("AGE", 0.0, 100.0, 50.0)
+    DIS = st.slider("DIS", 0.0, 15.0, 4.0)
+    RAD = st.slider("RAD", 0, 25, 5)
 
 with col3:
-    TAX = st.number_input("TAX", min_value=0, value=300)
-    PTRATIO = st.number_input("PTRATIO", min_value=0.0, value=18.0)
-    B = st.number_input("B", min_value=0.0, value=350.0)
-    LSTAT = st.number_input("LSTAT", min_value=0.0, value=12.0)
+    TAX = st.slider("TAX", 0, 800, 300)
+    PTRATIO = st.slider("PTRATIO", 0.0, 25.0, 18.0)
+    B = st.slider("B", 0.0, 400.0, 350.0)
+    LSTAT = st.slider("LSTAT", 0.0, 40.0, 12.0)
 
-st.write("")
+input_data = pd.DataFrame({
+    "CRIM": [CRIM],
+    "ZN": [ZN],
+    "INDUS": [INDUS],
+    "CHAS": [CHAS],
+    "NOX": [NOX],
+    "RM": [RM],
+    "AGE": [AGE],
+    "DIS": [DIS],
+    "RAD": [RAD],
+    "TAX": [TAX],
+    "PTRATIO": [PTRATIO],
+    "B": [B],
+    "LSTAT": [LSTAT]
+})
 
-if st.button("🏠 Predict House Price", use_container_width=True):
+prediction = model.predict(input_data)[0]
 
-    input_data = pd.DataFrame({
-        "CRIM": [CRIM],
-        "ZN": [ZN],
-        "INDUS": [INDUS],
-        "CHAS": [CHAS],
-        "NOX": [NOX],
-        "RM": [RM],
-        "AGE": [AGE],
-        "DIS": [DIS],
-        "RAD": [RAD],
-        "TAX": [TAX],
-        "PTRATIO": [PTRATIO],
-        "B": [B],
-        "LSTAT": [LSTAT]
-    })
-
-    prediction = model.predict(input_data)[0]
-
-    st.success(
-        f"Predicted House Value: {prediction:.2f}"
-    )
+st.success(f"Predicted House Value: {prediction:.2f}")
